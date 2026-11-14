@@ -25,7 +25,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            _tileHandler.editTile(Mouse.current.position.ReadValue(), TileTypes.Fire);
+            _tileHandler.editTileOnPlayer(
+                Mouse.current.position.ReadValue(),
+                TileTypes.Fire,
+                1,
+                Player_Identifier.Player1
+            );
         }
     }
 }

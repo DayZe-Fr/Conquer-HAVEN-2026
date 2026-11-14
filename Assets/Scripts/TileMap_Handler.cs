@@ -84,20 +84,51 @@ public class TileMap_Handler : MonoBehaviour
         int rad, 
         Player_Identifier playerIdentifier)
     {
-        Vector3Int cellPos;
+        Vector3Int playerCellPos;
         List<Vector3Int> playerOwnedTiles;
 
         if (playerIdentifier == Player_Identifier.Player1)
         {
-            cellPos = player1.playerPos;
+            playerCellPos = player1.playerPos;
             playerOwnedTiles = player1.ownedTiles;
+        } else
+        {
+            return;
         }
 
+            Vector3Int clickedCell = _mainMap.WorldToCell(
+             Camera.main.ScreenToWorldPoint(mouseScreenPos)
+        );
+    
+        if (!checkInBounds(clickedCell)) return;
+    
         
-
-
+        if (playerOwnedTiles.Contains(clickedCell)) return;
+    
+        bool isInRange = false;
+    
+        for (int x = -rad; x <= rad; x++) {
+            for (int y = -rad; y <= rad; y++)
+            {
+                Vector3Int checkCell = clickedCell + new Vector3Int(x, y, 0);
+    
+                if (playerOwnedTiles.Contains(checkCell))
+                {
+                    isInRange = true;
+                    break;
+                }
+            }
+    
+            if (isInRange) break;
+        }
+    
+        if (!isInRange)
+            return;
+    
+        editTile(mouseScreenPos, tileName);
+    
+        playerOwnedTiles.Add(clickedCell);
     }
-
 }
 
 public static class MapSize
