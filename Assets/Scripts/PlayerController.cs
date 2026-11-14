@@ -29,15 +29,3 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
-
-public class MapSize
-{
-    private MapSize() {}
-
-    
-    public readonly int minX = -8;
-    public readonly int maxX = 1;
-    public readonly int minY = -5;
-    public readonly int maxY = 4;
-    
-} 
