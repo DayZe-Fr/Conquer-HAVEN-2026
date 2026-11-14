@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     
     void Start()
     {
-        
+        _tileHandler.SpawnChars();
     }
 
     void Update()
@@ -40,11 +40,6 @@ public class PlayerController : MonoBehaviour
                 1,
                 Player_Identifier.Player1
             );
-            
-            if (didPlace)
-            {
-                _roundhandler.addPoints(-2);
-            }
             
             _roundhandler.nextRound();
         }

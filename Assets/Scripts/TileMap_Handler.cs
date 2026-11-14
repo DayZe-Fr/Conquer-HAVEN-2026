@@ -7,6 +7,8 @@ public class TileMap_Handler : MonoBehaviour
 {
     [SerializeField]
     private Tilemap _mainMap;
+    [SerializeField]
+    private Tilemap _charTilemap;
 
     [SerializeField]
     private TileBase water;
@@ -19,13 +21,33 @@ public class TileMap_Handler : MonoBehaviour
     [SerializeField]
     private TileBase lays;
 
+
+    //
+
     [SerializeField]
+    private TileBase p1Icon;
+    [SerializeField]
+    private TileBase bot2Icon;
+    [SerializeField]
+    private TileBase bot3Icon;
+    [SerializeField]
+    private TileBase bot4Icon;
+
+    
     private Dictionary<TileTypes, TileBase> _tileSet;
+    private Dictionary<Player_Identifier, List<Vector3Int>> _ownedTiles;
+
+    private Dictionary<Player_Identifier, Vector3Int> _spawnPositions;
+
+    private Dictionary<Player_Identifier, TileTypes> _spawnTiles;
+
+    [SerializeField]
+    private Roundhandler _roundhandler;
 
 
 
 
-
+    private bool spawned = false;
     public Vector3Int Player1Position => player1.playerPos;
     //
 
@@ -48,6 +70,33 @@ public class TileMap_Handler : MonoBehaviour
             { TileTypes.Tar, tar },
             { TileTypes.Lays_barbacue_chips, lays }
         };
+        _ownedTiles = new Dictionary<Player_Identifier, List<Vector3Int>>()
+        {
+            { Player_Identifier.Player1, new List<Vector3Int>() },
+            { Player_Identifier.Bot2, new List<Vector3Int>() },
+            { Player_Identifier.Bot3, new List<Vector3Int>() },
+            { Player_Identifier.Bot4, new List<Vector3Int>() }
+        };
+        _spawnPositions = new Dictionary<Player_Identifier, Vector3Int>()
+        {
+            { Player_Identifier.Player1, new Vector3Int(-6, 2, 0) },
+            { Player_Identifier.Bot2, new Vector3Int(-1, 2, 0) },
+            { Player_Identifier.Bot3, new Vector3Int(-6, -3, 0) },
+            { Player_Identifier.Bot4, new Vector3Int(-1, -3, 0) }
+        };
+
+        _spawnTiles = new Dictionary<Player_Identifier, TileTypes>()
+        {
+            { Player_Identifier.Player1, TileTypes.Fire },
+            { Player_Identifier.Bot2, TileTypes.Lays_barbacue_chips },
+            { Player_Identifier.Bot3, TileTypes.Water },
+            { Player_Identifier.Bot4, TileTypes.Wind }
+        };
+        
+    
+        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot2], bot2Icon);
+        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot3], bot3Icon);
+        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot3Icon);
     }
 
     public void editTile(Vector2 mouseScreenPos, TileTypes tileName)
@@ -56,10 +105,7 @@ public class TileMap_Handler : MonoBehaviour
         
         Vector3Int cell = _mainMap.WorldToCell(targetpos);
 
-        if (!checkInBounds(cell))
-        {
-            return;
-        }
+        if (!checkInBounds(cell)) return;
 
         TileBase targettedcell = _tileSet[tileName];
 
@@ -84,19 +130,21 @@ public class TileMap_Handler : MonoBehaviour
         int rad, 
         Player_Identifier playerIdentifier)
     {
-        Vector3Int playerCellPos;
+
+        if (!_ownedTiles.ContainsKey(playerIdentifier))
+        return false;
+
         List<Vector3Int> playerOwnedTiles;
 
         if (playerIdentifier == Player_Identifier.Player1)
         {
-            playerCellPos = player1.playerPos;
             playerOwnedTiles = player1.ownedTiles;
         } else
         {
-            return false;
+            playerOwnedTiles = _ownedTiles[playerIdentifier];
         }
 
-            Vector3Int clickedCell = _mainMap.WorldToCell(
+        Vector3Int clickedCell = _mainMap.WorldToCell(
              Camera.main.ScreenToWorldPoint(mouseScreenPos)
         );
     
@@ -124,12 +172,42 @@ public class TileMap_Handler : MonoBehaviour
         }
     
         if (!isInRange) return false;
-    
+
+        int cost = getTileCost(clickedCell);
+
+        if (!_roundhandler.spendPoints(cost)) return false;
+
         editTile(mouseScreenPos, tileName);
-    
+
         playerOwnedTiles.Add(clickedCell);
 
         return true;
+    }
+
+    private int getTileCost(Vector3Int cell)
+    {
+        TileBase targetTile = _mainMap.GetTile(cell);
+
+        if (targetTile == null) return 1;
+    
+        return 4;
+    }
+
+    public void SpawnChars()
+    {
+        if (spawned) return;
+        foreach (var participant in _spawnPositions)
+        {
+            Player_Identifier id = participant.Key;
+            Vector3Int position = participant.Value;
+
+            TileTypes tileType = _spawnTiles[id];
+
+            _mainMap.SetTile(position, _tileSet[tileType]);
+
+            _ownedTiles[id].Add(position);
+        }
+        spawned = true;
     }
 }
 
@@ -153,5 +231,8 @@ public enum TileTypes
 
 public enum Player_Identifier
 {
-    Player1
+    Player1,
+    Bot2,
+    Bot3,
+    Bot4
 }
