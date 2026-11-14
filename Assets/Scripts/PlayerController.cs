@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(InputHandler))]
 [RequireComponent(typeof(TileMap_Handler))]
 [RequireComponent(typeof(CameraHandler))]
+[RequireComponent(typeof(Roundhandler))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private CameraHandler _camHandler;
     [SerializeField]
     private InputHandler _inputHandler;
+    [SerializeField]
+    private Roundhandler _roundhandler;
 
     
     void Start()
@@ -23,14 +26,27 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        tilePlacement();
+    }
+
+    private void tilePlacement()
+    {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            _tileHandler.editTileOnPlayer(
+            if (_roundhandler.points <= 0) return;
+            bool didPlace = _tileHandler.editTileOnPlayer(
                 Mouse.current.position.ReadValue(),
                 TileTypes.Fire,
                 1,
                 Player_Identifier.Player1
             );
+            
+            if (didPlace)
+            {
+                _roundhandler.addPoints(-2);
+            }
+            
+            _roundhandler.nextRound();
         }
     }
 }

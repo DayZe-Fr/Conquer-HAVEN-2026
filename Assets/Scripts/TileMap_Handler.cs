@@ -78,7 +78,7 @@ public class TileMap_Handler : MonoBehaviour
         return true;
     }
 
-    public void editTileOnPlayer(
+    public bool editTileOnPlayer(
         Vector2 mouseScreenPos, 
         TileTypes tileName, 
         int rad, 
@@ -93,21 +93,22 @@ public class TileMap_Handler : MonoBehaviour
             playerOwnedTiles = player1.ownedTiles;
         } else
         {
-            return;
+            return false;
         }
 
             Vector3Int clickedCell = _mainMap.WorldToCell(
              Camera.main.ScreenToWorldPoint(mouseScreenPos)
         );
     
-        if (!checkInBounds(clickedCell)) return;
+        if (!checkInBounds(clickedCell)) return false;
     
         
-        if (playerOwnedTiles.Contains(clickedCell)) return;
+        if (playerOwnedTiles.Contains(clickedCell)) return false;
     
         bool isInRange = false;
     
-        for (int x = -rad; x <= rad; x++) {
+        for (int x = -rad; x <= rad; x++) 
+        {
             for (int y = -rad; y <= rad; y++)
             {
                 Vector3Int checkCell = clickedCell + new Vector3Int(x, y, 0);
@@ -122,12 +123,13 @@ public class TileMap_Handler : MonoBehaviour
             if (isInRange) break;
         }
     
-        if (!isInRange)
-            return;
+        if (!isInRange) return false;
     
         editTile(mouseScreenPos, tileName);
     
         playerOwnedTiles.Add(clickedCell);
+
+        return true;
     }
 }
 
