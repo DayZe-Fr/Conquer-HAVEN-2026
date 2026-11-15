@@ -29,7 +29,7 @@ public class CameraHandler : MonoBehaviour
         
         if (currentAspect != _aspect_ratio)
         {
-            Screen.SetResolution((int) _prevWidth, (int)(_prevHeight/_aspect_ratio), true);
+            Screen.SetResolution((int) _prevWidth, (int)(_prevHeight/_aspect_ratio), false);
         }
     }
 }

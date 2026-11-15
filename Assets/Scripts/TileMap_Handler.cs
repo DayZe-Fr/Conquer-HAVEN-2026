@@ -79,10 +79,10 @@ public class TileMap_Handler : MonoBehaviour
         };
         _spawnPositions = new Dictionary<Player_Identifier, Vector3Int>()
         {
-            { Player_Identifier.Player1, new Vector3Int(-6, 2, 0) },
-            { Player_Identifier.Bot2, new Vector3Int(-1, 2, 0) },
-            { Player_Identifier.Bot3, new Vector3Int(-6, -3, 0) },
-            { Player_Identifier.Bot4, new Vector3Int(-1, -3, 0) }
+            { Player_Identifier.Player1, new Vector3Int(-6, 2, 0) }, 
+            { Player_Identifier.Bot2, new Vector3Int(-1, 2, 0) }, // lays barbacue chips
+            { Player_Identifier.Bot3, new Vector3Int(-6, -3, 0) }, // water
+            { Player_Identifier.Bot4, new Vector3Int(-1, -3, 0) } // wind
         };
 
         _spawnTiles = new Dictionary<Player_Identifier, TileTypes>()
