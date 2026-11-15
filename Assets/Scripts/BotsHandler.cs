@@ -7,7 +7,7 @@ public class BotsHandler : MonoBehaviour
 
 
 
-    public void Init()
+    public void Init(Dictionary<Player_Identifier, Vector3Int> spawnPos)
     {
         
     }
