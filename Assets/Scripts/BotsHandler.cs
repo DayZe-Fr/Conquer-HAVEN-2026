@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BotsHandler : MonoBehaviour
 {
-    private static BotsHandler ins{get; set;}
     [SerializeField]
     private static TileMap_Handler tileMap_Handler;
     private static List<Bot> bots;
@@ -26,7 +25,7 @@ public class BotsHandler : MonoBehaviour
         initialized = true;
     }
 
-    public static void botsTurn()
+public static void botsTurn()
     {
         if (bots == null || tileMap_Handler == null) return;
 
@@ -34,30 +33,30 @@ public class BotsHandler : MonoBehaviour
         {
             List<Vector3Int> availableCells = new List<Vector3Int>();
 
-        // Find all available cells surrounding owned territory.
             foreach (Vector3Int ownedCell in bot.ownedTiles)
             {
-                for (int x = -1; x <= 1; x++)
+                Vector3Int[] directions =
                 {
-                    for (int y = -1; y <= 1; y++)
+                    Vector3Int.up,
+                    Vector3Int.down,
+                    Vector3Int.left,
+                    Vector3Int.right
+                };
+
+                foreach (Vector3Int direction in directions)
+                {
+                    Vector3Int targetCell = ownedCell + direction;
+
+                    if (!availableCells.Contains(targetCell) &&
+                        tileMap_Handler.canBotClaim(targetCell, bot.identifer))
                     {
-                        if (x == 0 && y == 0) continue;
-
-                        Vector3Int targetCell = ownedCell + new Vector3Int(x, y, 0);
-
-                       if (!availableCells.Contains(targetCell) &&
-                            tileMap_Handler.canBotClaim(targetCell, bot.identifer))
-                        {
-                            availableCells.Add(targetCell);
-                        }
+                        availableCells.Add(targetCell);
                     }
                 }
             }
 
-        // No available cells? This bot can't expand.
             if (availableCells.Count == 0) continue;
 
-        // Claim one random cell.
             Vector3Int chosenCell = availableCells[Random.Range(0, availableCells.Count)];
 
             if (tileMap_Handler.claimBotTile(chosenCell, bot.identifer))
@@ -81,7 +80,7 @@ public class BotsHandler : MonoBehaviour
             _BotPos = SpawnPos;
             _ownedTiles = new List<Vector3Int>()
             {
-                new Vector3Int(-6, 2, 0)
+                SpawnPos
             };
             _identifer = Botidentifier;
         }

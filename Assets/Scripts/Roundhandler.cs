@@ -10,7 +10,7 @@ public class Roundhandler : MonoBehaviour
 
     private int _points = 0;
     public int points => _points;
-    private int _rounds = 0;
+    private int _rounds = 2;
     public int rounds => _rounds;
 
     private void updateUI()

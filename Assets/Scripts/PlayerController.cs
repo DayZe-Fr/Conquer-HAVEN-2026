@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
         );
         if (didPlace) 
         {
-            _roundhandler.nextRound();
             _audioHandler.playAudio(placeTile);
         }
     }
