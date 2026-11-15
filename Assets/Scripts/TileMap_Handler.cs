@@ -68,6 +68,8 @@ public class TileMap_Handler : MonoBehaviour
         player1.playerPos = newCell;
     }
 
+    public BotsHandler _bothandler;
+
     void Awake()
     {
         _tileSet = new Dictionary<TileTypes, TileBase>()
@@ -106,7 +108,12 @@ public class TileMap_Handler : MonoBehaviour
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot3], bot3Icon);
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot3Icon);
 
-        BotsHandler.Init(_spawnPositions);
+        _bothandler.Init(_spawnPositions);
+    }
+
+    public void deleteCharacterTile(Vector3Int cell)
+    {
+        _charTilemap.SetTile(cell, null);
     }
 
     public void editTile(Vector2 mouseScreenPos, TileTypes tileName)
@@ -184,6 +191,10 @@ public class TileMap_Handler : MonoBehaviour
         if (!isInRange) return false;
 
         int cost = getTileCost(clickedCell);
+        if (BotsHandler.isBotPos(clickedCell))
+        {
+            BotsHandler.deleteBot(clickedCell);
+        }
 
         if (!_roundhandler.spendPoints(cost)) return false;
 
@@ -199,8 +210,30 @@ public class TileMap_Handler : MonoBehaviour
         TileBase targetTile = _mainMap.GetTile(cell);
 
         if (targetTile == null) return 1;
+        if (BotsHandler.isBotPos(cell)) return 8;
     
         return 4;
+    }
+
+    public bool canBotClaim(Vector3Int cell, Player_Identifier id)
+    {
+        if (!checkInBounds(cell)) return false;
+        if (!_ownedTiles.ContainsKey(id)) return false;
+
+    // Don't claim an already occupied tile.
+        if (_mainMap.GetTile(cell) != null) return false;
+
+        return true;
+    }
+
+    public bool claimBotTile(Vector3Int cell, Player_Identifier id)
+    {
+        if (!canBotClaim(cell, id)) return false;
+
+        _mainMap.SetTile(cell, _tileSet[_spawnTiles[id]]);
+        _ownedTiles[id].Add(cell);
+
+        return true;
     }
 
     public void SpawnChars()
