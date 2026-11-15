@@ -31,12 +31,14 @@ public class Roundhandler : MonoBehaviour
 
     public void nextRound()
     {
+        BotsHandler.botsTurn();
         _rounds += 1;
         updateUI();
     }
 
     public void skipRound()
     {
+        BotsHandler.botsTurn();
         _rounds += 1;
         _points += 2;
         updateUI();

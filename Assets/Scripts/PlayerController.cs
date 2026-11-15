@@ -33,6 +33,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private AudioClip playerMove;
 
+    [SerializeField]
+    private GameObject player;
+
+
+
+    private bool MoveMode = false;
+
     
     void Start()
     {
@@ -41,26 +48,111 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        tilePlacement();
+        if (Mouse.current.leftButton.wasPressedThisFrame) {
+            if (MoveMode)
+            {
+                movePlayer(_tileHandler.getCellTileByMousePos(Mouse.current.position.ReadValue()));
+            } else
+            {
+                tilePlacement();
+            }
+        }
     }
 
     private void tilePlacement()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (_roundhandler.points <= 0) return;
+        bool didPlace = _tileHandler.editTileOnPlayer(
+            Mouse.current.position.ReadValue(),
+            TileTypes.Fire,
+            1,
+            Player_Identifier.Player1
+        );
+        if (didPlace) 
         {
-            if (_roundhandler.points <= 0) return;
-            bool didPlace = _tileHandler.editTileOnPlayer(
-                Mouse.current.position.ReadValue(),
-                TileTypes.Fire,
-                1,
-                Player_Identifier.Player1
-            );
-
-            if (didPlace) 
-            {
-                _roundhandler.nextRound();
-                _audioHandler.playAudio(placeTile);
-            }
+            _roundhandler.nextRound();
+            _audioHandler.playAudio(placeTile);
         }
+    }
+
+    private void movePlayer(Vector3Int cellToMove)
+    {
+        bool canMove = true;
+        if (cellToMove.x == TileMap_Handler.player1Pos.x &&
+            _tileHandler.checkInBounds(cellToMove) &&
+            TileMap_Handler.player1OwnedTiles.Contains(cellToMove)
+        ) {
+            int dir;
+
+            Vector3Int CurrentPos = TileMap_Handler.player1Pos;
+
+            if (cellToMove.y < CurrentPos.y) dir = -1;
+            else dir = 1;
+
+            Vector3Int checkingTile;
+
+            for (int tile_num = 1; 
+            tile_num < (int)Mathf.Abs(cellToMove.y - CurrentPos.y);
+            tile_num++
+            )
+            {
+                checkingTile = new Vector3Int(CurrentPos.x, CurrentPos.y+(tile_num * dir), 0);
+                if (!TileMap_Handler.player1OwnedTiles.Contains(checkingTile)) {
+                    canMove = false;
+                    break;
+                }
+            }
+            if (canMove) rollover(cellToMove);
+        }
+
+
+
+        else if (cellToMove.y == TileMap_Handler.player1Pos.y &&
+            _tileHandler.checkInBounds(cellToMove) &&
+            TileMap_Handler.player1OwnedTiles.Contains(cellToMove))
+        {
+            int dir;
+
+            Vector3Int CurrentPos = TileMap_Handler.player1Pos;
+
+            if (cellToMove.x < CurrentPos.x) dir = -1;
+            else dir = 1;
+
+            Vector3Int checkingTile;
+
+            for (
+                int tile_num = 1;
+                tile_num < (int)Mathf.Abs(cellToMove.x - CurrentPos.x);
+                tile_num++
+            )
+            {
+                checkingTile = new Vector3Int(
+                    CurrentPos.x + (tile_num * dir),
+                    CurrentPos.y,
+                    0
+                );
+
+                if (!TileMap_Handler.player1OwnedTiles.Contains(checkingTile)) {
+                    canMove = false;
+                    break;
+                }
+            }
+            if (canMove) rollover(cellToMove);
+        }
+        MoveMode = false;
+    }
+
+    private void rollover(Vector3Int celltomove)
+    {
+        TileMap_Handler.setPlrPos(celltomove);
+
+        Vector3 pos = (Vector3)celltomove + new Vector3(0.5f, 0.5f, 0f);
+
+        DTweenLib.NewTween(pos, 0.2f, () => player.transform.position, v => player.transform.position = v);
+    }
+
+    public void setMoveMode()
+    {
+        MoveMode = true;
     }
 }

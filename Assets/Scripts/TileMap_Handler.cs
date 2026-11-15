@@ -60,6 +60,14 @@ public class TileMap_Handler : MonoBehaviour
         };
     }
 
+    public static Vector3Int player1Pos => player1.playerPos;
+    public static List<Vector3Int> player1OwnedTiles => player1.ownedTiles;
+
+    public static void setPlrPos(Vector3Int newCell)
+    {
+        player1.playerPos = newCell;
+    }
+
     void Awake()
     {
         _tileSet = new Dictionary<TileTypes, TileBase>()
@@ -97,6 +105,8 @@ public class TileMap_Handler : MonoBehaviour
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot2], bot2Icon);
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot3], bot3Icon);
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot3Icon);
+
+        BotsHandler.Init(_spawnPositions);
     }
 
     public void editTile(Vector2 mouseScreenPos, TileTypes tileName)
@@ -112,7 +122,7 @@ public class TileMap_Handler : MonoBehaviour
         _mainMap.SetTile(cell, targettedcell);
     }
 
-    private bool checkInBounds(Vector3Int cell)
+    public bool checkInBounds(Vector3Int cell)
     {
         if (cell.x > MapSize.maxX
             || cell.x < MapSize.minX
@@ -208,6 +218,14 @@ public class TileMap_Handler : MonoBehaviour
             _ownedTiles[id].Add(position);
         }
         spawned = true;
+    }
+
+    public Vector3Int getCellTileByMousePos(Vector2 mousepos)
+    {
+        Vector3Int cell = _mainMap.WorldToCell(
+            Camera.main.ScreenToWorldPoint(mousepos)
+        );
+        return cell;
     }
 }
 
