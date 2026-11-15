@@ -7,6 +7,8 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(TileMap_Handler))]
 [RequireComponent(typeof(CameraHandler))]
 [RequireComponent(typeof(Roundhandler))]
+[RequireComponent(typeof(AudioHandler))]
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -17,6 +19,19 @@ public class PlayerController : MonoBehaviour
     private InputHandler _inputHandler;
     [SerializeField]
     private Roundhandler _roundhandler;
+    [SerializeField]
+    private AudioHandler _audioHandler;
+
+
+
+
+
+    [SerializeField]
+    private AudioClip placeTile;
+    [SerializeField]
+    private AudioClip playerDead;
+    [SerializeField]
+    private AudioClip playerMove;
 
     
     void Start()
@@ -40,8 +55,12 @@ public class PlayerController : MonoBehaviour
                 1,
                 Player_Identifier.Player1
             );
-            
-            _roundhandler.nextRound();
+
+            if (didPlace) 
+            {
+                _roundhandler.nextRound();
+                _audioHandler.playAudio(placeTile);
+            }
         }
     }
 }
