@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private Roundhandler _roundhandler;
     [SerializeField]
     private AudioHandler _audioHandler;
+    [SerializeField]
+    private HighlightsHandler _highlightsHandler;
+    
 
 
 
@@ -58,6 +61,18 @@ public class PlayerController : MonoBehaviour
                 tilePlacement();
             }
         }
+        
+        HighlightsHandler.ModeType highlightType = HighlightsHandler.ModeType.PLACE;
+        if (MoveMode)
+        {
+            highlightType = HighlightsHandler.ModeType.MOVE;
+        }
+
+        _highlightsHandler.HandleHoverEffects(
+            highlightType, 
+            Mouse.current.position.ReadValue(), 
+            _tileHandler.Player1Position
+        );
     }
 
     private void tilePlacement()

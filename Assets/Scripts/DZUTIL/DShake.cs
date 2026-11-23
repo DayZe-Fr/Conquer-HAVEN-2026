@@ -1,19 +1,20 @@
 using UnityEngine;
 
-public class DShakeLib : MonoBehaviour
+public static class DShakeLib
 {
     public static bool IsInitialized = false;
+
+
+    private static float remainingTime = 0;
+
     public static void setInitialized(bool val)
     {
         DTweenLib.IsInitialized = val;
         IsInitialized = val;
     }
-    void Start()
-    {
-        
-    }
+    
 
-    void Update()
+    public static void runShake()
     {
         
     }

@@ -3,40 +3,44 @@ using UnityEngine.Tilemaps;
 
 // i decided to give this its own script because the tilemap handler is already getting crowded anyway.
 // this will also handle the arrow effect when using Move
-
+[RequireComponent(typeof(TileMap_Handler))]
 public class HighlightsHandler : MonoBehaviour
 {
     [SerializeField]
     private Tilemap _highlightMap;
+    [SerializeField]
     private TileBase _highlightTile;
     private Vector3Int _oldLocation = new Vector3Int(0, 0, 0);
 
+    private TileMap_Handler _tilemaphandler;
+
     void Awake()
     {
-        Texture2D texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, Color.black);
-        texture.Apply();
-
-        Sprite sprite = Sprite.Create(
-            texture,
-            new Rect(0, 0, 1, 1),
-            Vector2.zero
-        );
-
-        Tile tile = ScriptableObject.CreateInstance<Tile>();
-        tile.sprite = sprite;
-        tile.color = new Color(0, 0, 0, 0.5f);
-
-        _highlightTile = tile; 
+        _tilemaphandler = gameObject.GetComponent<TileMap_Handler>(); 
     }
 
 
-    void HandleHoverEffects(ModeType mode, Vector2 MousePosition, Vector3Int PlayerPos)
+    public void HandleHoverEffects(ModeType mode, Vector2 MousePosition, Vector3Int PlayerPos)
     {
-        Vector3 screenPos = getCellTileByMousePos(MousePosition);
+        Vector3Int CellPos = getCellTileByMousePos(MousePosition);
+        if (!_tilemaphandler.checkInBounds(CellPos))
+        {
+            _highlightMap.SetTile(_oldLocation, null);
+            return;
+        }
+        if (CellPos == _oldLocation)
+        {
+            return;
+        }
+
+        // 
+
         if (mode == ModeType.PLACE)
         {
-            
+            _highlightMap.SetTile(_oldLocation, null);
+            _highlightMap.SetTile(CellPos, _highlightTile);
+
+            _oldLocation = CellPos;
         }
     }
 

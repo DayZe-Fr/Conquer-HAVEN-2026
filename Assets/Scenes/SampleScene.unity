@@ -1766,6 +1766,7 @@ GameObject:
   - component: {fileID: 783917477}
   - component: {fileID: 783917478}
   - component: {fileID: 783917480}
+  - component: {fileID: 783917481}
   - component: {fileID: 783917479}
   m_Layer: 0
   m_Name: Manager
@@ -1791,6 +1792,7 @@ MonoBehaviour:
   _inputHandler: {fileID: 783917474}
   _roundhandler: {fileID: 783917477}
   _audioHandler: {fileID: 783917478}
+  _highlightsHandler: {fileID: 783917481}
   placeTile: {fileID: 8300000, guid: 9129597f2530b92429fb2c3eeb63ce75, type: 3}
   playerDead: {fileID: 8300000, guid: 45fa7f6820e5ab141bdf7fddcea767b3, type: 3}
   playerMove: {fileID: 8300000, guid: 7ce8091854c82be48829fcbe33014e2c, type: 3}
@@ -1996,6 +1998,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d6b9679633b5e408576e33d8c92abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BotsHandler
+--- !u!114 &783917481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783917470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c3e93982cf2a174d85ca26ed0bb6122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HighlightsHandler
+  _highlightMap: {fileID: 1488985014}
+  _highlightTile: {fileID: 11400000, guid: 892d378e39a7ba8439bc3ed225776fea, type: 2}
 --- !u!1 &1029934099
 GameObject:
   m_ObjectHideFlags: 0

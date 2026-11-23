@@ -114,6 +114,7 @@ public class TileMap_Handler : MonoBehaviour
     public void deleteCharacterTile(Vector3Int cell)
     {
         _charTilemap.SetTile(cell, null);
+        editTile(cell, TileTypes.Fire);
     }
 
     public void editTile(Vector2 mouseScreenPos, TileTypes tileName)
@@ -127,6 +128,15 @@ public class TileMap_Handler : MonoBehaviour
         TileBase targettedcell = _tileSet[tileName];
 
         _mainMap.SetTile(cell, targettedcell);
+    }
+
+    public void editTile(Vector3Int cellPosition, TileTypes tileName)
+    {
+        if (!checkInBounds(cellPosition)) return;
+
+        TileBase targettedcell = _tileSet[tileName];
+
+        _mainMap.SetTile(cellPosition, targettedcell);
     }
 
     public bool checkInBounds(Vector3Int cell)
