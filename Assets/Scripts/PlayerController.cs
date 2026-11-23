@@ -8,6 +8,7 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(CameraHandler))]
 [RequireComponent(typeof(Roundhandler))]
 [RequireComponent(typeof(AudioHandler))]
+[RequireComponent(typeof(HighlightsHandler))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -101,7 +102,11 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-            if (canMove) rollover(cellToMove);
+            if (canMove) 
+            {
+                rollover(cellToMove);
+                _audioHandler.playAudio(playerMove);
+            }
         }
 
 

@@ -106,7 +106,7 @@ public class TileMap_Handler : MonoBehaviour
     
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot2], bot2Icon);
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot3], bot3Icon);
-        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot3Icon);
+        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot4Icon);
 
         _bothandler.Init(_spawnPositions);
     }
@@ -264,6 +264,7 @@ public class TileMap_Handler : MonoBehaviour
 
 public static class MapSize
 {    
+    
     public static readonly int minX = -8;
     public static readonly int maxX = 1;
     public static readonly int minY = -5;

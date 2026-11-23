@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DTween_Driver : MonoBehaviour
+public class DZUtil_Driver : MonoBehaviour
 {
     void Awake()
     {
