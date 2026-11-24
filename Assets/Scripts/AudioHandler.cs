@@ -5,8 +5,13 @@ public class AudioHandler : MonoBehaviour
 {
     [SerializeField]
     private AudioSource source;
-    public void playAudio(AudioClip clip)
+    public void playAudio(SoundEffect sound)
     {
-        source.PlayOneShot(clip);
+        source.clip = sound.clip;
+        source.time = Mathf.Clamp(sound.startTime, 0, sound.clip.length);
+        source.pitch = sound.speed;
+        source.volume = Mathf.Clamp01(sound.volume);
+
+        source.Play();
     }
 }

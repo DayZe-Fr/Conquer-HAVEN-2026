@@ -26,16 +26,8 @@ public class PlayerController : MonoBehaviour
     private HighlightsHandler _highlightsHandler;
     
 
-
-
-
-
     [SerializeField]
-    private AudioClip placeTile;
-    [SerializeField]
-    private AudioClip playerDead;
-    [SerializeField]
-    private AudioClip playerMove;
+    private SoundEffect playerMove;
 
     [SerializeField]
     private GameObject player;
@@ -84,10 +76,6 @@ public class PlayerController : MonoBehaviour
             1,
             Player_Identifier.Player1
         );
-        if (didPlace) 
-        {
-            _audioHandler.playAudio(placeTile);
-        }
     }
 
     private void movePlayer(Vector3Int cellToMove)
@@ -116,11 +104,6 @@ public class PlayerController : MonoBehaviour
                     canMove = false;
                     break;
                 }
-            }
-            if (canMove) 
-            {
-                rollover(cellToMove);
-                _audioHandler.playAudio(playerMove);
             }
         }
 
@@ -156,7 +139,11 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-            if (canMove) rollover(cellToMove);
+        }
+        if (canMove) 
+        {
+            _audioHandler.playAudio(playerMove);
+            rollover(cellToMove);
         }
         MoveMode = false;
     }

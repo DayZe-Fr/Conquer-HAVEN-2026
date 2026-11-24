@@ -33,6 +33,13 @@ public class TileMap_Handler : MonoBehaviour
     [SerializeField]
     private TileBase bot4Icon;
 
+    [SerializeField]
+    private AudioHandler _audioHandler;
+    [SerializeField]
+    private SoundEffect playerDead;
+        [SerializeField]
+    private SoundEffect placeTile;
+
     
     private Dictionary<TileTypes, TileBase> _tileSet;
     private Dictionary<Player_Identifier, List<Vector3Int>> _ownedTiles;
@@ -201,12 +208,14 @@ public class TileMap_Handler : MonoBehaviour
         if (!isInRange) return false;
 
         int cost = getTileCost(clickedCell);
+
+        if (!_roundhandler.spendPoints(cost)) return false;
+        
         if (BotsHandler.isBotPos(clickedCell))
         {
             BotsHandler.deleteBot(clickedCell);
-        }
-
-        if (!_roundhandler.spendPoints(cost)) return false;
+            _audioHandler.playAudio(playerDead);
+        } else _audioHandler.playAudio(placeTile);
 
         editTile(mouseScreenPos, tileName);
 
@@ -230,7 +239,7 @@ public class TileMap_Handler : MonoBehaviour
         if (!checkInBounds(cell)) return false;
         if (!_ownedTiles.ContainsKey(id)) return false;
 
-    // Don't claim an already occupied tile.
+    // Dont claim an already occupied tile... uh, for now.
         if (_mainMap.GetTile(cell) != null) return false;
 
         return true;
