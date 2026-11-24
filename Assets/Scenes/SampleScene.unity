@@ -1852,6 +1852,7 @@ MonoBehaviour:
   _audioHandler: {fileID: 783917478}
   playerDead: {fileID: 11400000, guid: 2d5aa694be8c24546ac7545320f70ed7, type: 2}
   placeTile: {fileID: 11400000, guid: 7ae1acb2d335c14489bcf425ac12df3e, type: 2}
+  actionDenied: {fileID: 11400000, guid: 38ab48b8e6b5b4f42bb69cdf0bc01db5, type: 2}
   _roundhandler: {fileID: 783917477}
   _bothandler: {fileID: 783917480}
 --- !u!114 &783917474

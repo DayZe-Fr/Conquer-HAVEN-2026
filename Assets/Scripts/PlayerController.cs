@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
     private void tilePlacement()
     {
-        if (_roundhandler.points <= 0) return;
+        // if (_roundhandler.points <= 0) return;
         bool didPlace = _tileHandler.editTileOnPlayer(
             Mouse.current.position.ReadValue(),
             TileTypes.Fire,

@@ -37,8 +37,11 @@ public class TileMap_Handler : MonoBehaviour
     private AudioHandler _audioHandler;
     [SerializeField]
     private SoundEffect playerDead;
-        [SerializeField]
+    [SerializeField]
     private SoundEffect placeTile;
+    [SerializeField]
+    private SoundEffect actionDenied;
+
 
     
     private Dictionary<TileTypes, TileBase> _tileSet;
@@ -166,7 +169,10 @@ public class TileMap_Handler : MonoBehaviour
     {
 
         if (!_ownedTiles.ContainsKey(playerIdentifier))
-        return false;
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
 
         List<Vector3Int> playerOwnedTiles;
 
@@ -185,7 +191,11 @@ public class TileMap_Handler : MonoBehaviour
         if (!checkInBounds(clickedCell)) return false;
     
         
-        if (playerOwnedTiles.Contains(clickedCell)) return false;
+        if (playerOwnedTiles.Contains(clickedCell))
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
     
         bool isInRange = false;
     
@@ -205,11 +215,19 @@ public class TileMap_Handler : MonoBehaviour
             if (isInRange) break;
         }
     
-        if (!isInRange) return false;
+        if (!isInRange)
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        };
 
         int cost = getTileCost(clickedCell);
 
-        if (!_roundhandler.spendPoints(cost)) return false;
+        if (!_roundhandler.spendPoints(cost)) 
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
         
         if (BotsHandler.isBotPos(clickedCell))
         {

@@ -8,11 +8,16 @@ public class Roundhandler : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI points_count;
 
-    private int _points = 0;
+    [SerializeField]
+    private int _points = 2;
     public int points => _points;
-    private int _rounds = 2;
+    private int _rounds = 0;
     public int rounds => _rounds;
 
+    void Awake()
+    {
+        updateUI();
+    }
     private void updateUI()
     {
         points_count.text = "Points; " + _points;
