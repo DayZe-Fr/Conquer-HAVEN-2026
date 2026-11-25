@@ -1,11 +1,12 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ParticlesHandler : MonoBehaviour
 {
     [SerializeField]
     private ParticleSystem _tileBurstEmitter;
+    private GameObject _gameObject_tileBurstEmmitter;
     private ParticleSystemRenderer _tileBurstEmitterRenderer;
 
 
@@ -21,28 +22,36 @@ public class ParticlesHandler : MonoBehaviour
     [SerializeField]
     private Texture2D _TarTex;
 
-    private Dictionary<Player_Identifier, Texture2D> _textureDict;
+    private Dictionary<TileTypes, Texture2D> _textureDict;
 
 
     void Awake()
     {
-        _tileBurstEmitterRenderer = GetComponent<ParticleSystemRenderer>();
-        _textureDict = new Dictionary<Player_Identifier, Texture2D>()
+        _gameObject_tileBurstEmmitter = _tileBurstEmitter.gameObject;
+        _tileBurstEmitterRenderer = _gameObject_tileBurstEmmitter.GetComponent<ParticleSystemRenderer>();
+        _textureDict = new Dictionary<TileTypes, Texture2D>()
         {
-            {Player_Identifier.Player1, _FireTex},
-            {Player_Identifier.Bot2, _LaysTex},
-            {Player_Identifier.Bot3, _WaterTex},
-            {Player_Identifier.Bot4, _WindTex},
+            {TileTypes.Fire, _FireTex},
+            {TileTypes.Lays_barbacue_chips, _LaysTex},
+            {TileTypes.Water, _WaterTex},
+            {TileTypes.Wind, _WindTex},
+            {TileTypes.Tar, _TarTex}
         };
     }
 
-    public void playTileBurstAtMouse(
+    public void EmitTileBurstAtCell(
         int amount,
-        TileTypes textureType
+        TileTypes textureType,
+        Vector3Int CellPos
     )
     {
-        Texture2D textureToSet;
+        Texture2D textureToSet = _textureDict[textureType];
+        _tileBurstEmitterRenderer.material.mainTexture = textureToSet;
 
+        Vector3 Pos = (Vector3)CellPos + new Vector3(0.5f, 0.5f, -1);
 
+        _gameObject_tileBurstEmmitter.transform.position = Pos;
+
+        _tileBurstEmitter.Emit(amount);    
     }
 }

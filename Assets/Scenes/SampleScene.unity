@@ -1798,6 +1798,7 @@ GameObject:
   - component: {fileID: 783917478}
   - component: {fileID: 783917480}
   - component: {fileID: 783917481}
+  - component: {fileID: 783917482}
   - component: {fileID: 783917479}
   m_Layer: 0
   m_Name: Manager
@@ -1824,7 +1825,7 @@ MonoBehaviour:
   _roundhandler: {fileID: 783917477}
   _audioHandler: {fileID: 783917478}
   _highlightsHandler: {fileID: 783917481}
-  _particlesHandler: {fileID: 0}
+  _particlesHandler: {fileID: 783917482}
   playerMove: {fileID: 11400000, guid: 1bd36594269a0a54eb019e06935f4ffe, type: 2}
   player: {fileID: 1029934099}
 --- !u!114 &783917473
@@ -1855,6 +1856,7 @@ MonoBehaviour:
   placeTile: {fileID: 11400000, guid: 7ae1acb2d335c14489bcf425ac12df3e, type: 2}
   actionDenied: {fileID: 11400000, guid: 38ab48b8e6b5b4f42bb69cdf0bc01db5, type: 2}
   _roundhandler: {fileID: 783917477}
+  _particleHandler: {fileID: 783917482}
   _bothandler: {fileID: 783917480}
 --- !u!114 &783917474
 MonoBehaviour:
@@ -2047,6 +2049,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HighlightsHandler
   _highlightMap: {fileID: 1488985014}
   _highlightTile: {fileID: 11400000, guid: 892d378e39a7ba8439bc3ed225776fea, type: 2}
+--- !u!114 &783917482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783917470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d558cc4e6821cf468a64bd04eacba9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticlesHandler
+  _tileBurstEmitter: {fileID: 1998540106}
+  _FireTex: {fileID: 2800000, guid: c15bde275fe8d464ab2d6b19f7cd603a, type: 3}
+  _WaterTex: {fileID: 2800000, guid: 2e46c663a6dca4e4b9b89500f8ce21dc, type: 3}
+  _WindTex: {fileID: 2800000, guid: f9fcc20be8feec249a392e2eaca403fd, type: 3}
+  _LaysTex: {fileID: 2800000, guid: 16434b02f6668a34aae0ff1c241f5213, type: 3}
+  _TarTex: {fileID: 2800000, guid: dd31da2e2e941de4585cf97993485d95, type: 3}
 --- !u!1 &1029934099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3233,7 +3253,7 @@ GameObject:
   - component: {fileID: 1998540106}
   - component: {fileID: 1998540105}
   m_Layer: 0
-  m_Name: ParticleBurst
+  m_Name: TileParticleBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3417,7 +3437,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 0.01
       maxCurve:
         serializedVersion: 2
@@ -3905,7 +3925,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 4
+    maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -4288,7 +4308,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0.78461456
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -4298,11 +4318,11 @@ ParticleSystem:
         - serializedVersion: 3
           time: 1
           value: 0.29230765
-          inSlope: -2.073075
-          outSlope: -2.073075
+          inSlope: -1.0952095
+          outSlope: -1.0952095
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.1038962
+          inWeight: 0.09833032
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -8227,9 +8247,9 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 1887770411}
   - {fileID: 783917475}
+  - {fileID: 1275125668}
   - {fileID: 1029934101}
   - {fileID: 1298970948}
   - {fileID: 1767747385}
   - {fileID: 1525009238}
   - {fileID: 74566802}
-  - {fileID: 1275125668}

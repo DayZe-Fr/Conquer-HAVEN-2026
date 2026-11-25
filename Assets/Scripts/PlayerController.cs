@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private HighlightsHandler _highlightsHandler;
     [SerializeField]
-    private HighlightsHandler _particlesHandler;
+    private ParticlesHandler _particlesHandler;
     
 
     [SerializeField]

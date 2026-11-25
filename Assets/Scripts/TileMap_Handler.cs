@@ -53,6 +53,8 @@ public class TileMap_Handler : MonoBehaviour
 
     [SerializeField]
     private Roundhandler _roundhandler;
+    [SerializeField]
+    private ParticlesHandler _particleHandler;
 
 
 
@@ -235,6 +237,7 @@ public class TileMap_Handler : MonoBehaviour
             _audioHandler.playAudio(playerDead);
         } else _audioHandler.playAudio(placeTile);
 
+        _particleHandler.EmitTileBurstAtCell(10, getTiletypeByCell(clickedCell), clickedCell);
         editTile(mouseScreenPos, tileName);
 
         playerOwnedTiles.Add(clickedCell);
@@ -296,6 +299,19 @@ public class TileMap_Handler : MonoBehaviour
             Camera.main.ScreenToWorldPoint(mousepos)
         );
         return cell;
+    }
+
+    public TileTypes getTiletypeByCell(Vector3Int cell)
+    {
+        TileTypes type = TileTypes.Tar;
+        TileBase cellbase = _mainMap.GetTile(cell);
+        
+        if (cellbase == fire) type = TileTypes.Fire;
+        else if (cellbase == lays) type = TileTypes.Lays_barbacue_chips;
+        else if (cellbase == water) type = TileTypes.Water;
+        else if (cellbase == wind) type = TileTypes.Wind;
+
+        return type; // this shit is a terribel system but i plan to refactor the types system ANYWAY soooo.
     }
 }
 
