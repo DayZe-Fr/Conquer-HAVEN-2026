@@ -8,6 +8,8 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(CameraHandler))]
 [RequireComponent(typeof(Roundhandler))]
 [RequireComponent(typeof(AudioHandler))]
+[RequireComponent(typeof(HighlightsHandler))]
+[RequireComponent(typeof(ParticlesHandler))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,17 +23,14 @@ public class PlayerController : MonoBehaviour
     private Roundhandler _roundhandler;
     [SerializeField]
     private AudioHandler _audioHandler;
-
-
-
-
+    [SerializeField]
+    private HighlightsHandler _highlightsHandler;
+    [SerializeField]
+    private ParticlesHandler _particlesHandler;
+    
 
     [SerializeField]
-    private AudioClip placeTile;
-    [SerializeField]
-    private AudioClip playerDead;
-    [SerializeField]
-    private AudioClip playerMove;
+    private SoundEffect playerMove;
 
     [SerializeField]
     private GameObject player;
@@ -57,22 +56,29 @@ public class PlayerController : MonoBehaviour
                 tilePlacement();
             }
         }
+        
+        HighlightsHandler.ModeType highlightType = HighlightsHandler.ModeType.PLACE;
+        if (MoveMode)
+        {
+            highlightType = HighlightsHandler.ModeType.MOVE;
+        }
+
+        _highlightsHandler.HandleHoverEffects(
+            highlightType, 
+            Mouse.current.position.ReadValue(), 
+            _tileHandler.Player1Position
+        );
     }
 
     private void tilePlacement()
     {
-        if (_roundhandler.points <= 0) return;
+        // if (_roundhandler.points <= 0) return;
         bool didPlace = _tileHandler.editTileOnPlayer(
             Mouse.current.position.ReadValue(),
             TileTypes.Fire,
             1,
             Player_Identifier.Player1
         );
-        if (didPlace) 
-        {
-            _roundhandler.nextRound();
-            _audioHandler.playAudio(placeTile);
-        }
     }
 
     private void movePlayer(Vector3Int cellToMove)
@@ -102,7 +108,11 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-            if (canMove) rollover(cellToMove);
+            if (canMove) 
+            {
+                _audioHandler.playAudio(playerMove);
+                rollover(cellToMove);
+            }
         }
 
 
@@ -137,8 +147,13 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-            if (canMove) rollover(cellToMove);
+            if (canMove) 
+            {
+                _audioHandler.playAudio(playerMove);
+                rollover(cellToMove);
+            }
         }
+        
         MoveMode = false;
     }
 

@@ -33,6 +33,16 @@ public class TileMap_Handler : MonoBehaviour
     [SerializeField]
     private TileBase bot4Icon;
 
+    [SerializeField]
+    private AudioHandler _audioHandler;
+    [SerializeField]
+    private SoundEffect playerDead;
+    [SerializeField]
+    private SoundEffect placeTile;
+    [SerializeField]
+    private SoundEffect actionDenied;
+
+
     
     private Dictionary<TileTypes, TileBase> _tileSet;
     private Dictionary<Player_Identifier, List<Vector3Int>> _ownedTiles;
@@ -43,6 +53,8 @@ public class TileMap_Handler : MonoBehaviour
 
     [SerializeField]
     private Roundhandler _roundhandler;
+    [SerializeField]
+    private ParticlesHandler _particleHandler;
 
 
 
@@ -68,6 +80,8 @@ public class TileMap_Handler : MonoBehaviour
         player1.playerPos = newCell;
     }
 
+    public BotsHandler _bothandler;
+
     void Awake()
     {
         _tileSet = new Dictionary<TileTypes, TileBase>()
@@ -80,7 +94,7 @@ public class TileMap_Handler : MonoBehaviour
         };
         _ownedTiles = new Dictionary<Player_Identifier, List<Vector3Int>>()
         {
-            { Player_Identifier.Player1, new List<Vector3Int>() },
+            { Player_Identifier.Player1, player1.ownedTiles },
             { Player_Identifier.Bot2, new List<Vector3Int>() },
             { Player_Identifier.Bot3, new List<Vector3Int>() },
             { Player_Identifier.Bot4, new List<Vector3Int>() }
@@ -104,9 +118,15 @@ public class TileMap_Handler : MonoBehaviour
     
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot2], bot2Icon);
         _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot3], bot3Icon);
-        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot3Icon);
+        _charTilemap.SetTile(_spawnPositions[Player_Identifier.Bot4], bot4Icon);
 
-        BotsHandler.Init(_spawnPositions);
+        _bothandler.Init(_spawnPositions);
+    }
+
+    public void deleteCharacterTile(Vector3Int cell)
+    {
+        _charTilemap.SetTile(cell, null);
+        editTile(cell, TileTypes.Fire);
     }
 
     public void editTile(Vector2 mouseScreenPos, TileTypes tileName)
@@ -120,6 +140,15 @@ public class TileMap_Handler : MonoBehaviour
         TileBase targettedcell = _tileSet[tileName];
 
         _mainMap.SetTile(cell, targettedcell);
+    }
+
+    public void editTile(Vector3Int cellPosition, TileTypes tileName)
+    {
+        if (!checkInBounds(cellPosition)) return;
+
+        TileBase targettedcell = _tileSet[tileName];
+
+        _mainMap.SetTile(cellPosition, targettedcell);
     }
 
     public bool checkInBounds(Vector3Int cell)
@@ -142,7 +171,10 @@ public class TileMap_Handler : MonoBehaviour
     {
 
         if (!_ownedTiles.ContainsKey(playerIdentifier))
-        return false;
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
 
         List<Vector3Int> playerOwnedTiles;
 
@@ -161,7 +193,11 @@ public class TileMap_Handler : MonoBehaviour
         if (!checkInBounds(clickedCell)) return false;
     
         
-        if (playerOwnedTiles.Contains(clickedCell)) return false;
+        if (playerOwnedTiles.Contains(clickedCell))
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
     
         bool isInRange = false;
     
@@ -181,16 +217,32 @@ public class TileMap_Handler : MonoBehaviour
             if (isInRange) break;
         }
     
-        if (!isInRange) return false;
+        if (!isInRange)
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        };
 
         int cost = getTileCost(clickedCell);
 
-        if (!_roundhandler.spendPoints(cost)) return false;
+        if (!_roundhandler.spendPoints(cost)) 
+        {
+            _audioHandler.playAudio(actionDenied);
+            return false;
+        }
+        
+        if (BotsHandler.isBotPos(clickedCell))
+        {
+            BotsHandler.deleteBot(clickedCell);
+            _audioHandler.playAudio(playerDead);
+        } else _audioHandler.playAudio(placeTile);
 
+        _particleHandler.EmitTileBurstAtCell(10, getTiletypeByCell(clickedCell), clickedCell);
         editTile(mouseScreenPos, tileName);
 
         playerOwnedTiles.Add(clickedCell);
 
+        _roundhandler.nextRound();
         return true;
     }
 
@@ -199,8 +251,29 @@ public class TileMap_Handler : MonoBehaviour
         TileBase targetTile = _mainMap.GetTile(cell);
 
         if (targetTile == null) return 1;
+        if (BotsHandler.isBotPos(cell)) return 8;
     
         return 4;
+    }
+
+    public bool canBotClaim(Vector3Int cell, Player_Identifier id)
+    {
+        if (!checkInBounds(cell)) return false;
+        if (!_ownedTiles.ContainsKey(id)) return false;
+
+        if (_mainMap.GetTile(cell) != null) return false;
+
+        return true;
+    }
+
+    public bool claimBotTile(Vector3Int cell, Player_Identifier id)
+    {
+        if (!canBotClaim(cell, id)) return false;
+
+        _mainMap.SetTile(cell, _tileSet[_spawnTiles[id]]);
+        _ownedTiles[id].Add(cell);
+
+        return true;
     }
 
     public void SpawnChars()
@@ -227,10 +300,24 @@ public class TileMap_Handler : MonoBehaviour
         );
         return cell;
     }
+
+    public TileTypes getTiletypeByCell(Vector3Int cell)
+    {
+        TileTypes type = TileTypes.Tar;
+        TileBase cellbase = _mainMap.GetTile(cell);
+        
+        if (cellbase == fire) type = TileTypes.Fire;
+        else if (cellbase == lays) type = TileTypes.Lays_barbacue_chips;
+        else if (cellbase == water) type = TileTypes.Water;
+        else if (cellbase == wind) type = TileTypes.Wind;
+
+        return type; // this shit is a terribel system but i plan to refactor the types system ANYWAY soooo.
+    }
 }
 
 public static class MapSize
 {    
+    
     public static readonly int minX = -8;
     public static readonly int maxX = 1;
     public static readonly int minY = -5;

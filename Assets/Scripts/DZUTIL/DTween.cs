@@ -8,8 +8,16 @@ using UnityEngine.UIElements;
 
 public static class DTweenLib
 {
-    private static DTween_Driver TheDriver;
-    private static  bool IsInitialized = false;
+    private static DZUtil_Driver TheDriver;
+    public static bool IsInitialized = false; // for this, am intentionally making this a littlwe bad in the sense of using duplicates and having to check two different scripts
+    // but im trying to quickly get this system done.
+    // if i had more time, I'd improve this lib (since its an older library thingy i made for my previous game)
+    // however, I'd much rather focus this time on the game itself, rather than a dependancy that gets used occasionally.
+    public static void setInitialized(bool val)
+    {
+        DShakeLib.IsInitialized = val;
+        IsInitialized = val;
+    }
     private static List<Tween> Tasks = new List<Tween>();
 
     public static void NewTween(Vector3 Target, float Duration, Func<Vector3> getter, Action<Vector3> setter)
@@ -51,10 +59,11 @@ public static class DTweenLib
 
     static void Init()
     {
-        IsInitialized = true;
+        setInitialized(true);
+        // IsInitialized = true;
         GameObject Driver = new GameObject("DTweenDriver");
-        Driver.AddComponent<DTween_Driver>();
-        TheDriver = Driver.GetComponent<DTween_Driver>();
+        Driver.AddComponent<DZUtil_Driver>();
+        TheDriver = Driver.GetComponent<DZUtil_Driver>();
     }
 
     public static void RunTween(float DeltaTime)
@@ -97,4 +106,9 @@ public class Tween<T> : Tween
         setValue(Value);
         this.progress += DeltaTime;
     }
+}
+
+public class ScreenShake
+{
+    
 }
