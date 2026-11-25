@@ -92,7 +92,7 @@ public class TileMap_Handler : MonoBehaviour
         };
         _ownedTiles = new Dictionary<Player_Identifier, List<Vector3Int>>()
         {
-            { Player_Identifier.Player1, new List<Vector3Int>() },
+            { Player_Identifier.Player1, player1.ownedTiles },
             { Player_Identifier.Bot2, new List<Vector3Int>() },
             { Player_Identifier.Bot3, new List<Vector3Int>() },
             { Player_Identifier.Bot4, new List<Vector3Int>() }
@@ -239,6 +239,7 @@ public class TileMap_Handler : MonoBehaviour
 
         playerOwnedTiles.Add(clickedCell);
 
+        _roundhandler.nextRound();
         return true;
     }
 
@@ -257,7 +258,6 @@ public class TileMap_Handler : MonoBehaviour
         if (!checkInBounds(cell)) return false;
         if (!_ownedTiles.ContainsKey(id)) return false;
 
-    // Dont claim an already occupied tile... uh, for now.
         if (_mainMap.GetTile(cell) != null) return false;
 
         return true;

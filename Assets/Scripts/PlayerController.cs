@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(Roundhandler))]
 [RequireComponent(typeof(AudioHandler))]
 [RequireComponent(typeof(HighlightsHandler))]
+[RequireComponent(typeof(ParticlesHandler))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private AudioHandler _audioHandler;
     [SerializeField]
     private HighlightsHandler _highlightsHandler;
+    [SerializeField]
+    private HighlightsHandler _particlesHandler;
     
 
     [SerializeField]
@@ -105,6 +108,11 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
+            if (canMove) 
+            {
+                _audioHandler.playAudio(playerMove);
+                rollover(cellToMove);
+            }
         }
 
 
@@ -139,12 +147,13 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
+            if (canMove) 
+            {
+                _audioHandler.playAudio(playerMove);
+                rollover(cellToMove);
+            }
         }
-        if (canMove) 
-        {
-            _audioHandler.playAudio(playerMove);
-            rollover(cellToMove);
-        }
+        
         MoveMode = false;
     }
 
