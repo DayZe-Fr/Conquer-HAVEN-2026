@@ -315,29 +315,29 @@ public class TileMap_Handler : MonoBehaviour
     }
 }
 
-public static class MapSize
-{    
+// public static class MapSize
+// {    
     
-    public static readonly int minX = -8;
-    public static readonly int maxX = 1;
-    public static readonly int minY = -5;
-    public static readonly int maxY = 4;
-} 
+//     public static readonly int minX = -8;
+//     public static readonly int maxX = 1;
+//     public static readonly int minY = -5;
+//     public static readonly int maxY = 4;
+// } 
 
 
-public enum TileTypes
-{
-    Water,
-    Wind,
-    Fire,
-    Tar,
-    Lays_barbacue_chips
-}
+// public enum TileTypes
+// {
+//     Water,
+//     Wind,
+//     Fire,
+//     Tar,
+//     Lays_barbacue_chips
+// }
 
-public enum Player_Identifier
-{
-    Player1,
-    Bot2,
-    Bot3,
-    Bot4
-}
+// public enum Player_Identifier
+// {
+//     Player1,
+//     Bot2,
+//     Bot3,
+//     Bot4
+// }

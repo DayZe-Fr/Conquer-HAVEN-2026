@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab784064211bb2244974bcf212857b13, type: 3}
+  m_Name: Lays
+  m_EditorClassIdentifier: Assembly-CSharp::TileSetting
+  _type: 4
+  _accociate: 1
+  _texture: {fileID: 2800000, guid: 16434b02f6668a34aae0ff1c241f5213, type: 3}
+  _tile: {fileID: 11400000, guid: 63447cc634ecfaf4781907931da0de98, type: 2}

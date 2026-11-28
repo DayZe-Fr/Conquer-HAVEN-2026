@@ -5,7 +5,7 @@ using UnityEngine;
 public class BotsHandler : MonoBehaviour
 {
     [SerializeField]
-    private static TileMap_Handler tileMap_Handler;
+    private static TilemapHandler tileMap_Handler;
     private static List<Bot> bots;
 
     private static bool initialized = false;
@@ -21,7 +21,7 @@ public class BotsHandler : MonoBehaviour
             Bot newBot = new Bot(entry.Value, entry.Key);
             bots.Add(newBot);
         }
-        tileMap_Handler = gameObject.GetComponent<TileMap_Handler>();
+        tileMap_Handler = gameObject.GetComponent<TilemapHandler>();
         initialized = true;
     }
 

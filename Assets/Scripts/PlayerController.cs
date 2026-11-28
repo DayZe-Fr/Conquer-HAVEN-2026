@@ -4,19 +4,30 @@ using UnityEngine.Tilemaps;
 
 
 [RequireComponent(typeof(InputHandler))]
-[RequireComponent(typeof(TileMap_Handler))]
+
 [RequireComponent(typeof(CameraHandler))]
+
 [RequireComponent(typeof(Roundhandler))]
+
 [RequireComponent(typeof(AudioHandler))]
+
 [RequireComponent(typeof(HighlightsHandler))]
+
 [RequireComponent(typeof(ParticlesHandler))]
+
 [RequireComponent(typeof(CameraHandler))]
+
 [RequireComponent(typeof(Scheduler))]
+
+[RequireComponent(typeof(TilemapHandler))]
+[RequireComponent(typeof(TilemapUtil))]
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private TileMap_Handler _tileHandler;
+    private TilemapHandler _tileHandler;
+    [SerializeField]
+    private TilemapUtil _tileUtil;
     [SerializeField]
     private CameraHandler _camHandler;
     [SerializeField]
@@ -52,7 +63,7 @@ public class PlayerController : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame) {
             if (MoveMode)
             {
-                movePlayer(_tileHandler.getCellTileByMousePos(Mouse.current.position.ReadValue()));
+                movePlayer(_tileUtil.getCellByScreenPos(Mouse.current.position.ReadValue()));
             } else
             {
                 tilePlacement();
@@ -68,7 +79,7 @@ public class PlayerController : MonoBehaviour
         _highlightsHandler.HandleHoverEffects(
             highlightType, 
             Mouse.current.position.ReadValue(), 
-            _tileHandler.Player1Position
+            _tileHandler.Player1Pos
         );
     }
 
@@ -85,14 +96,15 @@ public class PlayerController : MonoBehaviour
 
     private void movePlayer(Vector3Int cellToMove)
     {
+        Player_Identifier TEMPORARY_HARDCODED_PLAYER_IDENTIFIER = Player_Identifier.Player1; // Full caps to grab attention, like yelling, "THERES DIRT HERE". hardcoded for noww but i will flexible-ify it laters.
         bool canMove = true;
-        if (cellToMove.x == TileMap_Handler.player1Pos.x &&
-            _tileHandler.checkInBounds(cellToMove) &&
-            TileMap_Handler.player1OwnedTiles.Contains(cellToMove)
+        if (cellToMove.x == _tileHandler.Player1Pos.x &&
+            _tileUtil.checkInBounds(cellToMove) &&
+            _tileHandler.isOwnedBy(cellToMove, TEMPORARY_HARDCODED_PLAYER_IDENTIFIER)
         ) {
             int dir;
 
-            Vector3Int CurrentPos = TileMap_Handler.player1Pos;
+            Vector3Int CurrentPos = _tileHandler.Player1Pos;
 
             if (cellToMove.y < CurrentPos.y) dir = -1;
             else dir = 1;
@@ -105,7 +117,7 @@ public class PlayerController : MonoBehaviour
             )
             {
                 checkingTile = new Vector3Int(CurrentPos.x, CurrentPos.y+(tile_num * dir), 0);
-                if (!TileMap_Handler.player1OwnedTiles.Contains(checkingTile)) {
+                if (!_tileHandler.isOwnedBy(checkingTile, TEMPORARY_HARDCODED_PLAYER_IDENTIFIER)) {
                     canMove = false;
                     break;
                 }
@@ -119,13 +131,13 @@ public class PlayerController : MonoBehaviour
 
 
 
-        else if (cellToMove.y == TileMap_Handler.player1Pos.y &&
-            _tileHandler.checkInBounds(cellToMove) &&
-            TileMap_Handler.player1OwnedTiles.Contains(cellToMove))
+        else if (cellToMove.y == _tileHandler.Player1Pos.y &&
+            _tileUtil.checkInBounds(cellToMove) &&
+            _tileHandler.isOwnedBy(cellToMove, TEMPORARY_HARDCODED_PLAYER_IDENTIFIER))
         {
             int dir;
 
-            Vector3Int CurrentPos = TileMap_Handler.player1Pos;
+            Vector3Int CurrentPos = _tileHandler.Player1Pos;
 
             if (cellToMove.x < CurrentPos.x) dir = -1;
             else dir = 1;
@@ -144,7 +156,7 @@ public class PlayerController : MonoBehaviour
                     0
                 );
 
-                if (!TileMap_Handler.player1OwnedTiles.Contains(checkingTile)) {
+                if (!_tileHandler.isOwnedBy(checkingTile, TEMPORARY_HARDCODED_PLAYER_IDENTIFIER)) {
                     canMove = false;
                     break;
                 }
@@ -162,7 +174,7 @@ public class PlayerController : MonoBehaviour
 
     private void rollover(Vector3Int celltomove)
     {
-        TileMap_Handler.setPlrPos(celltomove);
+        TilemapHandler.setPlrPos(celltomove);
 
         Vector3 pos = (Vector3)celltomove + new Vector3(0.5f, 0.5f, 0f);
 

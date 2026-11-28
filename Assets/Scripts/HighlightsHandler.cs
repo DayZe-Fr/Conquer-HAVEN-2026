@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 // i decided to give this its own script because the tilemap handler is already getting crowded anyway.
 // this will also handle the arrow effect when using Move
-[RequireComponent(typeof(TileMap_Handler))]
+[RequireComponent(typeof(TilemapUtil))]
 public class HighlightsHandler : MonoBehaviour
 {
     [SerializeField]
@@ -12,18 +12,14 @@ public class HighlightsHandler : MonoBehaviour
     private TileBase _highlightTile;
     private Vector3Int _oldLocation = new Vector3Int(0, 0, 0);
 
-    private TileMap_Handler _tilemaphandler;
-
-    void Awake()
-    {
-        _tilemaphandler = gameObject.GetComponent<TileMap_Handler>(); 
-    }
+    [SerializeField]
+    private TilemapUtil _tilemapUtil;
 
 
     public void HandleHoverEffects(ModeType mode, Vector2 MousePosition, Vector3Int PlayerPos)
     {
         Vector3Int CellPos = getCellTileByMousePos(MousePosition);
-        if (!_tilemaphandler.checkInBounds(CellPos))
+        if (!_tilemapUtil.checkInBounds(CellPos))
         {
             _highlightMap.SetTile(_oldLocation, null);
             return;

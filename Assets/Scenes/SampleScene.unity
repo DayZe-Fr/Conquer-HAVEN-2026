@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 8874e43669417c84f9918fc0ca4d819c, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -11711,7 +11711,6 @@ GameObject:
   m_Component:
   - component: {fileID: 783917475}
   - component: {fileID: 783917474}
-  - component: {fileID: 783917473}
   - component: {fileID: 783917472}
   - component: {fileID: 783917476}
   - component: {fileID: 783917477}
@@ -11720,6 +11719,8 @@ GameObject:
   - component: {fileID: 783917481}
   - component: {fileID: 783917482}
   - component: {fileID: 783917483}
+  - component: {fileID: 783917485}
+  - component: {fileID: 783917484}
   - component: {fileID: 783917479}
   m_Layer: 0
   m_Name: Manager
@@ -11740,7 +11741,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83c93f098f213d040a604cc89f231500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  _tileHandler: {fileID: 783917473}
+  _tileHandler: {fileID: 783917485}
+  _tileUtil: {fileID: 783917484}
   _camHandler: {fileID: 783917476}
   _inputHandler: {fileID: 783917474}
   _roundhandler: {fileID: 783917477}
@@ -11749,36 +11751,6 @@ MonoBehaviour:
   _particlesHandler: {fileID: 783917482}
   playerMove: {fileID: 11400000, guid: 1bd36594269a0a54eb019e06935f4ffe, type: 2}
   player: {fileID: 1029934099}
---- !u!114 &783917473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783917470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 854732f2aa023a241a8d9828f1191614, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TileMap_Handler
-  _mainMap: {fileID: 2100590614}
-  _charTilemap: {fileID: 393620911}
-  water: {fileID: 11400000, guid: b1eb2f83e1132094da746350c4a61ae3, type: 2}
-  wind: {fileID: 11400000, guid: 0e35a005ce1871d4bbe33c0f0b5a9ec7, type: 2}
-  fire: {fileID: 11400000, guid: 75217f97b46114b4ba4215707ba1e540, type: 2}
-  tar: {fileID: 11400000, guid: 5038971ae36644a4bbf59ddcb2b9f23d, type: 2}
-  lays: {fileID: 11400000, guid: 63447cc634ecfaf4781907931da0de98, type: 2}
-  p1Icon: {fileID: 11400000, guid: a36f440a546c8f043be4e2df07a5d69e, type: 2}
-  bot2Icon: {fileID: 11400000, guid: cc0d9b0360651c7458181bdbae654356, type: 2}
-  bot3Icon: {fileID: 11400000, guid: 088c542967334f0458433abf8b855830, type: 2}
-  bot4Icon: {fileID: 11400000, guid: eaed6637145e2e44b81d2b350c222d47, type: 2}
-  _audioHandler: {fileID: 783917478}
-  playerDead: {fileID: 11400000, guid: 2d5aa694be8c24546ac7545320f70ed7, type: 2}
-  placeTile: {fileID: 11400000, guid: 7ae1acb2d335c14489bcf425ac12df3e, type: 2}
-  actionDenied: {fileID: 11400000, guid: 38ab48b8e6b5b4f42bb69cdf0bc01db5, type: 2}
-  _roundhandler: {fileID: 783917477}
-  _particleHandler: {fileID: 783917482}
-  _bothandler: {fileID: 783917480}
 --- !u!114 &783917474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11970,6 +11942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HighlightsHandler
   _highlightMap: {fileID: 1488985014}
   _highlightTile: {fileID: 11400000, guid: 892d378e39a7ba8439bc3ed225776fea, type: 2}
+  _tilemapUtil: {fileID: 783917484}
 --- !u!114 &783917482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12006,6 +11979,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01c485d6f455164d9b6e5ce3ad3d661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scheduler
+--- !u!114 &783917484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783917470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c585bd5af4e82914dac157360c51565e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapUtil
+  _mainMap: {fileID: 2100590614}
+  _charTilemap: {fileID: 393620911}
+  _tileSettings:
+  - {fileID: 11400000, guid: 52e69a66f087c8a44a42bf1ee91c1b71, type: 2}
+  - {fileID: 11400000, guid: c36da1d5df02a9a419c5ae1644a4635b, type: 2}
+  - {fileID: 11400000, guid: 540ddfe11171843469d0f34e848133e3, type: 2}
+  - {fileID: 11400000, guid: f8749cbcd75bfce4a9932fbc5924a764, type: 2}
+--- !u!114 &783917485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783917470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db86c8a547164e840ac466e9c73d425f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapHandler
+  _mainMap: {fileID: 2100590614}
+  _charTilemap: {fileID: 393620911}
+  water: {fileID: 11400000, guid: 540ddfe11171843469d0f34e848133e3, type: 2}
+  wind: {fileID: 11400000, guid: f8749cbcd75bfce4a9932fbc5924a764, type: 2}
+  fire: {fileID: 11400000, guid: 52e69a66f087c8a44a42bf1ee91c1b71, type: 2}
+  lays: {fileID: 11400000, guid: c36da1d5df02a9a419c5ae1644a4635b, type: 2}
+  bot2Icon: {fileID: 11400000, guid: cc0d9b0360651c7458181bdbae654356, type: 2}
+  bot3Icon: {fileID: 11400000, guid: 088c542967334f0458433abf8b855830, type: 2}
+  bot4Icon: {fileID: 11400000, guid: eaed6637145e2e44b81d2b350c222d47, type: 2}
+  _audioHandler: {fileID: 783917478}
+  _roundhandler: {fileID: 783917477}
+  _particleHandler: {fileID: 783917482}
+  _bothandler: {fileID: 783917480}
+  playerDead: {fileID: 11400000, guid: 2d5aa694be8c24546ac7545320f70ed7, type: 2}
+  placeTile: {fileID: 11400000, guid: 7ae1acb2d335c14489bcf425ac12df3e, type: 2}
+  actionDenied: {fileID: 11400000, guid: 38ab48b8e6b5b4f42bb69cdf0bc01db5, type: 2}
 --- !u!1 &1029934099
 GameObject:
   m_ObjectHideFlags: 0
