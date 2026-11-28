@@ -10,6 +10,8 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(AudioHandler))]
 [RequireComponent(typeof(HighlightsHandler))]
 [RequireComponent(typeof(ParticlesHandler))]
+[RequireComponent(typeof(CameraHandler))]
+[RequireComponent(typeof(Scheduler))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -155,6 +157,7 @@ public class PlayerController : MonoBehaviour
         }
         
         MoveMode = false;
+        _particlesHandler.ArrowTrailToggle(false);
     }
 
     private void rollover(Vector3Int celltomove)
@@ -168,6 +171,8 @@ public class PlayerController : MonoBehaviour
 
     public void setMoveMode()
     {
+        if (MoveMode) return;
         MoveMode = true;
+        _particlesHandler.ArrowTrailToggle(true);
     }
 }
