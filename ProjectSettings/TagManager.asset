@@ -53,5 +53,14 @@ TagManager:
   - name: Extras
     uniqueID: 2531018149
     locked: 0
+  - name: Overlays
+    uniqueID: 977159001
+    locked: 0
+  - name: ExtraOverlayParticles
+    uniqueID: 1424835899
+    locked: 0
+  - name: UpperForeground
+    uniqueID: 895376615
+    locked: 0
   m_RenderingLayers:
   - Default
